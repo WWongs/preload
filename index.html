@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<title>图片预加载之无序加载</title>
+    <link rel="stylesheet" type="text/css" href="./css/index.css" />
+</head>
+<body>
+	
+  <div class="box">
+  	<img src="img/1.png" alt="" id="img" />
+  	<p>
+  		<a href="##" class="btn" data-control="prev">上一页</a>
+  		<a href="##" class="btn" data-control="next">下一页</a>
+  	</p>
+  </div>	
+
+  <div class="loading">
+    <p class="process">0%</p>
+  </div>
+</body>
+
+<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+
+<!-- 普通方法只需要这一个js -->
+<!-- <script type="text/javascript" src="./js/index.js"></script> -->
+
+<!-- 面向对象方法需要下面所有 -->
+<script type="text/javascript" src="js/preload.js"></script>
+<script type="text/javascript">
+  //普通方式预加载
+var imgs = [
+    'img/1.png',
+    'img/2.png',
+    'img/3.png',
+    'img/4.png',
+    'img/5.png',
+    'img/6.png',
+    'img/7.png',
+    'img/8.ng',
+];
+
+var index = 0,
+    len = imgs.length,
+    $process = $('.process');
+
+$.preload(imgs,{
+  each: function(count){
+
+    $process.html(Math.round((count + 1) / len * 100) + '%');
+  },
+  all: function(){
+   $('.loading').hide();
+   document.title = '1/' + len;
+  }
+});
+
+$('.btn').on('click', function() {
+    if ('prev' === $(this).data('control')) {
+        index = Math.max(0, --index);
+    } else {
+        index = Math.min(len - 1, ++index);
+    }
+    document.title = (index + 1) + '/' + len;
+    $('#img').attr('src', imgs[index]);
+});
+</script>
+</html>
